@@ -1,16 +1,21 @@
+import Shell from "@/components/layout/Shell";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
+
 export default function Page() {
   return (
-    <main className="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center gap-3 px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">RF-Analyzer</h1>
-      <p className="max-w-prose text-muted">
-        Fondasi proyek sudah berjalan. Komponen kalkulator akan dirakit di halaman ini.
-      </p>
-      <div className="mt-4 flex items-center gap-3">
-        <span className="num rounded-md bg-accent px-3 py-1.5 text-sm text-on-accent">20.0 dBm</span>
-        <span className="rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-muted">
-          Uji token warna
-        </span>
-      </div>
-    </main>
+    <Shell
+      sidebar={
+        <Card title="Input">
+          <p className="text-sm text-muted">Kontrol daya, antena, dan kabel akan tampil di sini.</p>
+        </Card>
+      }
+    >
+      <Card title="EIRP" action={<Badge tone="safe">Aman</Badge>}>
+        <p className="num text-5xl font-light tracking-tight">
+          20.0 <span className="text-2xl text-faint">dBm</span>
+        </p>
+      </Card>
+    </Shell>
   );
 }
