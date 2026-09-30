@@ -1,0 +1,11 @@
+export const dbmToMw = (dbm) => Math.pow(10, dbm / 10);
+export const mwToDbm = (mw) => 10 * Math.log10(Math.max(mw, 0.0001));
+export const dbmToW = (dbm) => dbmToMw(dbm) / 1000;
+export const wToDbm = (w) => mwToDbm(w * 1000);
+export const dbmToDbw = (dbm) => dbm - 30;
+export const dbmToDbuv = (dbm) => dbm + 107;
+export const dbiToDbd = (dbi) => dbi - 2.15;
+export const dbdToDbi = (dbd) => dbd + 2.15;
+export const eirpToErp = (eirpDbm) => eirpDbm - 2.15;
+export const linearToDb = (ratio) => 10 * Math.log10(Math.max(ratio, 1e-12));
+export const dbToLinear = (db) => Math.pow(10, db / 10);
