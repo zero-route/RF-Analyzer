@@ -1,1 +1,8 @@
-{}
+ {
+  "name": "Radio Frequency Analyzer",
+  "short_name": "RF-Analyzer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ECEEE7",
+  "theme_color": "#ECEEE7"
+}
