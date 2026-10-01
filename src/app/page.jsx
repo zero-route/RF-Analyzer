@@ -7,8 +7,7 @@ import SourceModeSwitch from "@/components/controls/SourceModeSwitch";
 import PhaseModeSwitch from "@/components/controls/PhaseModeSwitch";
 import CableInput from "@/components/controls/CableInput";
 import FrequencyPicker from "@/components/controls/FrequencyPicker";
-import EirpGauge from "@/components/gauges/EirpGauge";
-import PowerScale from "@/components/gauges/PowerScale";
+import TabView from "@/components/tabs/TabView";
 
 export default function Page() {
   return (
@@ -26,8 +25,7 @@ export default function Page() {
         </>
       }
     >
-      <EirpGauge />
-      <PowerScale />
+      <TabView />
     </Shell>
   );
 }
