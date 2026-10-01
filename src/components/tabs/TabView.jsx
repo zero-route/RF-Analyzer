@@ -3,10 +3,12 @@
 import Card from "@/components/ui/Card";
 import { useCalcStore } from "@/store/useCalcStore";
 import SummaryTab from "./SummaryTab";
+import PatternTab from "./PatternTab";
 import LinkBudgetTab from "./LinkBudgetTab";
 
 const VIEWS = {
   summary: SummaryTab,
+  pattern: PatternTab,
   link: LinkBudgetTab,
 };
 
