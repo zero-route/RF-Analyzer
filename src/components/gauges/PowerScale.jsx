@@ -37,20 +37,20 @@ export default function PowerScale() {
 
   return (
     <Card title="Skala daya (logaritmik)">
-      <svg viewBox={`0 0 ${W} 64`} className="block w-full" role="img" aria-label="Posisi EIRP pada skala dBm dan mW">
-        <rect x={xAt(MIN)} y="26" width={xAt(20) - xAt(MIN)} height="6" rx="3" fill="var(--line)" />
-        <rect x={xAt(20)} y="26" width={xAt(30) - xAt(20)} height="6" fill="var(--faint)" />
-        <rect x={xAt(30)} y="26" width={xAt(MAX) - xAt(30)} height="6" rx="3" fill="var(--accent)" />
+      <svg viewBox={`0 0 ${W} 72`} className="block w-full" role="img" aria-label="Posisi EIRP pada skala dBm dan mW">
+        <rect x={xAt(MIN)} y="32" width={xAt(20) - xAt(MIN)} height="6" rx="3" fill="var(--line)" />
+        <rect x={xAt(20)} y="32" width={xAt(30) - xAt(20)} height="6" fill="var(--faint)" />
+        <rect x={xAt(30)} y="32" width={xAt(MAX) - xAt(30)} height="6" rx="3" fill="var(--accent)" />
         {TICKS.map((tick) => (
           <g key={tick.dbm}>
-            <line x1={xAt(tick.dbm)} y1="34" x2={xAt(tick.dbm)} y2="40" stroke="var(--faint)" strokeWidth="1" />
-            <text x={xAt(tick.dbm)} y="54" textAnchor="middle" fontSize="10" fill="var(--faint)" className="num">
+            <line x1={xAt(tick.dbm)} y1="40" x2={xAt(tick.dbm)} y2="46" stroke="var(--faint)" strokeWidth="1" />
+            <text x={xAt(tick.dbm)} y="62" textAnchor="middle" fontSize="13" fill="var(--faint)" className="num">
               {tick.label}
             </text>
           </g>
         ))}
-        <path d={`M${x - 5},12 L${x + 5},12 L${x},22 Z`} fill="var(--ink)" />
-        <text x={clamp(x, 28, W - 28)} y="8" textAnchor="middle" fontSize="11" fontWeight="500" fill="var(--ink)" className="num">
+        <path d={`M${x - 5},18 L${x + 5},18 L${x},28 Z`} fill="var(--ink)" />
+        <text x={clamp(x, 28, W - 28)} y="14" textAnchor="middle" fontSize="14" fontWeight="500" fill="var(--ink)" className="num">
           {eirp.toFixed(1)} dBm
         </text>
       </svg>

@@ -18,7 +18,7 @@ export default function SegmentedControl({ label, options, value, onChange, clas
               role="radio"
               aria-checked={active}
               onClick={() => onChange(option.value)}
-              className={`h-9 rounded-[5px] px-3 text-sm font-medium transition-colors ${
+              className={`h-9 min-w-0 truncate rounded-[5px] px-1.5 text-[13px] font-medium transition-colors ${
                 active ? "bg-surface text-ink shadow-[0_0_0_1px_var(--line)]" : "text-muted hover:text-ink"
               }`}
             >
