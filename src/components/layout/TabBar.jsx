@@ -17,11 +17,11 @@ export default function TabBar() {
   return (
     <nav
       aria-label="Tampilan"
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:static lg:border-0 lg:bg-transparent lg:pb-0"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:static md:border-0 md:bg-transparent md:pb-0"
     >
       <div
         role="tablist"
-        className="grid grid-cols-5 lg:inline-grid lg:grid-flow-col lg:auto-cols-max lg:gap-0.5 lg:rounded-md lg:bg-sunken lg:p-0.5"
+        className="grid grid-cols-5 md:inline-grid md:grid-flow-col md:auto-cols-max md:gap-0.5 md:rounded-md md:bg-sunken md:p-0.5"
       >
         {TABS.map((tab) => {
           const isActive = tab.id === active;
@@ -32,9 +32,9 @@ export default function TabBar() {
               role="tab"
               aria-selected={isActive}
               onClick={() => update({ activeTab: tab.id })}
-              className={`h-14 border-t-2 text-xs font-medium transition-colors lg:h-9 lg:rounded-[5px] lg:border-t-0 lg:px-4 lg:text-sm ${
+              className={`h-14 border-t-2 text-xs font-medium transition-colors md:h-9 md:rounded-[5px] md:border-t-0 md:px-4 md:text-sm ${
                 isActive
-                  ? "border-accent text-ink lg:bg-surface lg:shadow-[0_0_0_1px_var(--line)]"
+                  ? "border-accent text-ink md:bg-surface md:shadow-[0_0_0_1px_var(--line)]"
                   : "border-transparent text-faint hover:text-ink"
               }`}
             >

@@ -11,12 +11,12 @@ export default function Shell({ sidebar, children }) {
   return (
     <div className="min-h-dvh">
       <Header onOpenInputs={() => setOpen(true)} />
-      <div className="lg:grid lg:grid-cols-[360px_minmax(0,1fr)]">
+      <div className="md:grid md:grid-cols-[300px_minmax(0,1fr)]">
         <Sidebar open={open} onClose={() => setOpen(false)}>
           {sidebar}
         </Sidebar>
-        <main className="min-w-0 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-6">
-          <div className="mx-auto max-w-5xl">
+        <main className="min-w-0 px-4 pb-24 pt-4 md:px-8 md:pb-10 md:pt-6">
+          <div className="mx-auto max-w-6xl">
             <TabBar />
             <div className="mt-4 flex flex-col gap-4">{children}</div>
           </div>
