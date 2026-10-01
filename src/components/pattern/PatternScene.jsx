@@ -22,8 +22,8 @@ export default function PatternScene() {
 
   return (
     <Canvas frameloop="demand" camera={{ position: [3.4, 2.2, 3.4], fov: 42 }} dpr={[1, 2]}>
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[4, 6, 3]} intensity={1.4} />
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[4, 6, 3]} intensity={1.1} />
       <directionalLight position={[-4, -2, -3]} intensity={0.5} />
       <LobeMesh bw={bw} dark={dark} />
       <mesh rotation={[-Math.PI / 2, 0, 0]}>

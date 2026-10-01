@@ -3,13 +3,13 @@
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { directionalGain } from "@/lib/rf/pattern";
-import { rampRgb } from "@/lib/utils/colorRamp";
+import { heatRgb } from "@/lib/utils/colorRamp";
 
 const AZ_STEPS = 72;
 const EL_STEPS = 36;
 const SCALE = 1.6;
 
-function buildGeometry(bw, dark) {
+function buildGeometry(bw) {
   const positions = [];
   const colors = [];
   const indices = [];
@@ -26,7 +26,7 @@ function buildGeometry(bw, dark) {
         r * SCALE * Math.sin(elRad),
         r * SCALE * Math.cos(elRad) * Math.sin(azRad)
       );
-      const [cr, cg, cb] = rampRgb(r, dark);
+      const [cr, cg, cb] = heatRgb(r);
       colors.push(cr / 255, cg / 255, cb / 255);
     }
   }
@@ -51,20 +51,20 @@ function buildGeometry(bw, dark) {
 }
 
 export default function LobeMesh({ bw, dark }) {
-  const geometry = useMemo(() => buildGeometry(bw, dark), [bw, dark]);
+  const geometry = useMemo(() => buildGeometry(bw), [bw]);
 
   useEffect(() => () => geometry.dispose(), [geometry]);
 
   return (
     <group>
       <mesh geometry={geometry}>
-        <meshStandardMaterial vertexColors side={THREE.DoubleSide} roughness={0.85} metalness={0} />
+        <meshStandardMaterial vertexColors side={THREE.DoubleSide} roughness={0.7} metalness={0} />
       </mesh>
       <mesh geometry={geometry}>
         <meshBasicMaterial
           wireframe
           transparent
-          opacity={0.18}
+          opacity={0.07}
           color={dark ? "#ededed" : "#111111"}
         />
       </mesh>

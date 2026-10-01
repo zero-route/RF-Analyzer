@@ -46,3 +46,32 @@ export function rampNumber(t, dark = false) {
   const [r, g, b] = rampRgb(t, dark);
   return (r << 16) | (g << 8) | b;
 }
+
+const HEAT_STOPS = [
+  [0, [20, 60, 255]],
+  [0.28, [175, 190, 255]],
+  [0.5, [255, 222, 20]],
+  [0.75, [255, 130, 0]],
+  [1, [210, 15, 15]],
+];
+
+export function heatRgb(t) {
+  const value = clamp(t, 0, 1);
+  for (let i = 0; i < HEAT_STOPS.length - 1; i += 1) {
+    const [p0, c0] = HEAT_STOPS[i];
+    const [p1, c1] = HEAT_STOPS[i + 1];
+    if (value <= p1) {
+      const f = (value - p0) / (p1 - p0);
+      return [
+        Math.round(c0[0] + (c1[0] - c0[0]) * f),
+        Math.round(c0[1] + (c1[1] - c0[1]) * f),
+        Math.round(c0[2] + (c1[2] - c0[2]) * f),
+      ];
+    }
+  }
+  return HEAT_STOPS[HEAT_STOPS.length - 1][1];
+}
+
+export const HEAT_GRADIENT = `linear-gradient(to right, ${HEAT_STOPS.map(
+  ([p, c]) => `rgb(${c[0]}, ${c[1]}, ${c[2]}) ${Math.round(p * 100)}%`
+).join(", ")})`;
