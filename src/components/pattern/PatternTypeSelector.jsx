@@ -19,7 +19,7 @@ export default function PatternTypeSelector() {
 
   return (
     <Card title="Jenis antena">
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5">
         <SegmentedControl options={TYPES} value={antennaType} onChange={(v) => update({ antennaType: v })} />
         <Slider
           label="Gain"

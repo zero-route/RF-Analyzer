@@ -65,7 +65,7 @@ export default function LobeMesh({ bw, dark }) {
           wireframe
           transparent
           opacity={0.18}
-          color={dark ? "#e6eae0" : "#182016"}
+          color={dark ? "#ededed" : "#111111"}
         />
       </mesh>
     </group>

@@ -7,11 +7,15 @@ import PolarPattern2D from "@/components/pattern/PolarPattern2D";
 
 export default function PatternTab() {
   return (
-    <>
-      <PatternTypeSelector />
-      <Pattern3D />
-      <PatternMetrics />
-      <PolarPattern2D />
-    </>
+    <div className="grid items-start gap-4 md:grid-cols-2">
+      <div className="flex flex-col gap-4">
+        <Pattern3D />
+        <PatternMetrics />
+      </div>
+      <div className="flex flex-col gap-4">
+        <PatternTypeSelector />
+        <PolarPattern2D />
+      </div>
+    </div>
   );
 }

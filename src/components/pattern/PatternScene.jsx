@@ -17,8 +17,8 @@ export default function PatternScene() {
     () => beamwidths({ type: antennaType, gainDbi, sectorH }),
     [antennaType, gainDbi, sectorH]
   );
-  const lineColor = dark ? "#2b3327" : "#cdd2c5";
-  const dotColor = dark ? "#e6eae0" : "#182016";
+  const lineColor = dark ? "#2a2a2a" : "#d4d4d4";
+  const dotColor = dark ? "#ededed" : "#111111";
 
   return (
     <Canvas frameloop="demand" camera={{ position: [3.4, 2.2, 3.4], fov: 42 }} dpr={[1, 2]}>

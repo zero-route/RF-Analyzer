@@ -14,7 +14,7 @@ export default function Pattern3D() {
       <div className="h-80 w-full overflow-hidden rounded-md bg-sunken sm:h-96">
         <PatternScene />
       </div>
-      <p className="mt-3 text-xs text-faint">Geser untuk memutar, cubit untuk zoom. Warna lebih gelap berarti sinyal lebih kuat.</p>
+      <p className="mt-3 text-xs text-faint">Geser untuk memutar, cubit untuk zoom. Area yang lebih kontras menandakan sinyal lebih kuat.</p>
     </Card>
   );
 }
