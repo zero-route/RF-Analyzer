@@ -16,10 +16,14 @@ export default function Pattern3D() {
         <PatternScene />
       </div>
       <div className="mx-auto mt-4 w-full max-w-[32rem]">
-        <div className="h-1.5 rounded-full" style={{ background: HEAT_GRADIENT }} />
-        <div className="mt-1.5 flex justify-between text-xs text-faint">
-          <span>Dekat sumber</span>
-          <span>Sinyal terkuat</span>
+        <p className="mb-2 text-xs text-muted">Gain relatif terhadap puncak (dB)</p>
+        <div className="h-2 rounded-sm" style={{ background: HEAT_GRADIENT }} />
+        <div className="num mt-1.5 flex justify-between text-xs text-faint">
+          <span>−20</span>
+          <span>−15</span>
+          <span>−10</span>
+          <span>−5</span>
+          <span>0</span>
         </div>
         <p className="mt-3 text-xs text-faint">Geser untuk memutar, cubit atau gulir untuk zoom.</p>
       </div>
