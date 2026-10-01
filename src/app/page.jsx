@@ -1,21 +1,33 @@
 import Shell from "@/components/layout/Shell";
-import Card from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
+import PresetMenu from "@/components/controls/PresetMenu";
+import PowerInput from "@/components/controls/PowerInput";
+import AntennaInput from "@/components/controls/AntennaInput";
+import ArrayInput from "@/components/controls/ArrayInput";
+import SourceModeSwitch from "@/components/controls/SourceModeSwitch";
+import PhaseModeSwitch from "@/components/controls/PhaseModeSwitch";
+import CableInput from "@/components/controls/CableInput";
+import FrequencyPicker from "@/components/controls/FrequencyPicker";
+import EirpGauge from "@/components/gauges/EirpGauge";
+import PowerScale from "@/components/gauges/PowerScale";
 
 export default function Page() {
   return (
     <Shell
       sidebar={
-        <Card title="Input">
-          <p className="text-sm text-muted">Kontrol daya, antena, dan kabel akan tampil di sini.</p>
-        </Card>
+        <>
+          <PresetMenu />
+          <PowerInput />
+          <AntennaInput />
+          <ArrayInput />
+          <SourceModeSwitch />
+          <PhaseModeSwitch />
+          <CableInput />
+          <FrequencyPicker />
+        </>
       }
     >
-      <Card title="EIRP" action={<Badge tone="safe">Aman</Badge>}>
-        <p className="num text-5xl font-light tracking-tight">
-          20.0 <span className="text-2xl text-faint">dBm</span>
-        </p>
-      </Card>
+      <EirpGauge />
+      <PowerScale />
     </Shell>
   );
 }
