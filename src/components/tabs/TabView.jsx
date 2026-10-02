@@ -1,28 +1,22 @@
 "use client";
 
-import Card from "@/components/ui/Card";
 import { useCalcStore } from "@/store/useCalcStore";
 import SummaryTab from "./SummaryTab";
 import PatternTab from "./PatternTab";
 import LinkBudgetTab from "./LinkBudgetTab";
+import CoverageTab from "./CoverageTab";
+import SafetyTab from "./SafetyTab";
 
 const VIEWS = {
   summary: SummaryTab,
   pattern: PatternTab,
   link: LinkBudgetTab,
+  coverage: CoverageTab,
+  safety: SafetyTab,
 };
 
 export default function TabView() {
   const active = useCalcStore((s) => s.activeTab);
-  const View = VIEWS[active];
-
-  if (!View) {
-    return (
-      <Card title="Segera hadir">
-        <p className="text-sm text-muted">Tampilan ini sedang disiapkan.</p>
-      </Card>
-    );
-  }
-
+  const View = VIEWS[active] ?? SummaryTab;
   return <View />;
 }
