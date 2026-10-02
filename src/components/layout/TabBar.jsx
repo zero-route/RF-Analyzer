@@ -8,6 +8,8 @@ export const TABS = [
   { id: "link", label: "Link" },
   { id: "coverage", label: "Jangkauan" },
   { id: "safety", label: "Keamanan" },
+  { id: "compare", label: "Bandingkan" },
+  { id: "tools", label: "Alat" },
 ];
 
 export default function TabBar() {
@@ -21,7 +23,7 @@ export default function TabBar() {
     >
       <div
         role="tablist"
-        className="grid grid-cols-5 md:inline-grid md:grid-flow-col md:auto-cols-max md:gap-0.5 md:rounded-md md:bg-sunken md:p-0.5"
+        className="flex max-w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:inline-flex md:gap-0.5 md:rounded-md md:bg-sunken md:p-0.5"
       >
         {TABS.map((tab) => {
           const isActive = tab.id === active;
@@ -32,7 +34,7 @@ export default function TabBar() {
               role="tab"
               aria-selected={isActive}
               onClick={() => update({ activeTab: tab.id })}
-              className={`h-14 border-t-2 text-xs font-medium transition-colors md:h-9 md:rounded-[5px] md:border-t-0 md:px-4 md:text-sm ${
+              className={`h-14 shrink-0 border-t-2 px-4 text-xs font-medium transition-colors md:h-9 md:rounded-[5px] md:border-t-0 md:px-3.5 md:text-sm ${
                 isActive
                   ? "border-accent text-ink md:bg-surface md:shadow-[0_0_0_1px_var(--line)]"
                   : "border-transparent text-faint hover:text-ink"
