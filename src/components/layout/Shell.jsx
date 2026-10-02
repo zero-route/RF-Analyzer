@@ -4,9 +4,11 @@ import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import TabBar from "./TabBar";
+import { useUrlState } from "@/hooks/useUrlState";
 
 export default function Shell({ sidebar, children }) {
   const [open, setOpen] = useState(false);
+  useUrlState();
 
   return (
     <div className="min-h-dvh">
