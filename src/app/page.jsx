@@ -1,5 +1,6 @@
 import Shell from "@/components/layout/Shell";
 import PresetMenu from "@/components/controls/PresetMenu";
+import ProfileMenu from "@/components/controls/ProfileMenu";
 import PowerInput from "@/components/controls/PowerInput";
 import AntennaInput from "@/components/controls/AntennaInput";
 import ArrayInput from "@/components/controls/ArrayInput";
@@ -22,6 +23,7 @@ export default function Page() {
           <PhaseModeSwitch />
           <CableInput />
           <FrequencyPicker />
+          <ProfileMenu />
         </>
       }
     >
