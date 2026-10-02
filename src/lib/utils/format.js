@@ -17,3 +17,11 @@ export function formatDistance(m) {
   if (m >= 10) return `${m.toFixed(0)} m`;
   return `${m.toFixed(1)} m`;
 }
+
+export function formatLength(m) {
+  if (!Number.isFinite(m)) return "—";
+  if (m < 1) return `${(m * 100).toFixed(m < 0.1 ? 1 : 0)} cm`;
+  if (m >= 1000) return `${(m / 1000).toFixed(2)} km`;
+  if (m >= 10) return `${m.toFixed(0)} m`;
+  return `${m.toFixed(1)} m`;
+}
