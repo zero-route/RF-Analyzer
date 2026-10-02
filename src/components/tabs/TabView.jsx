@@ -6,6 +6,8 @@ import PatternTab from "./PatternTab";
 import LinkBudgetTab from "./LinkBudgetTab";
 import CoverageTab from "./CoverageTab";
 import SafetyTab from "./SafetyTab";
+import CompareTab from "./CompareTab";
+import ToolsTab from "./ToolsTab";
 
 const VIEWS = {
   summary: SummaryTab,
@@ -13,6 +15,8 @@ const VIEWS = {
   link: LinkBudgetTab,
   coverage: CoverageTab,
   safety: SafetyTab,
+  compare: CompareTab,
+  tools: ToolsTab,
 };
 
 export default function TabView() {
