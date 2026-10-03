@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import NumberField from "@/components/ui/NumberField";
 import SegmentedControl from "@/components/ui/SegmentedControl";
+import { useCalcStore } from "@/store/useCalcStore";
 import { useRfModel } from "@/hooks/useRfModel";
 import { noiseFloorDbm } from "@/lib/rf/tools";
 
@@ -24,8 +24,9 @@ function quality(snr) {
 
 export default function NoiseSnr() {
   const { link } = useRfModel();
-  const [bandwidth, setBandwidth] = useState(20);
-  const [noiseFigure, setNoiseFigure] = useState(6);
+  const bandwidth = useCalcStore((s) => s.bandwidthMHz);
+  const noiseFigure = useCalcStore((s) => s.noiseFigureDb);
+  const update = useCalcStore((s) => s.update);
 
   const floor = noiseFloorDbm(bandwidth, noiseFigure);
   const snr = link.rxPowerDbm - floor;
@@ -34,7 +35,12 @@ export default function NoiseSnr() {
   return (
     <Card title="Noise floor dan SNR" action={<Badge tone={q.tone}>{q.label}</Badge>}>
       <div className="flex flex-col gap-4">
-        <SegmentedControl label="Lebar kanal (MHz)" options={BANDWIDTHS} value={bandwidth} onChange={setBandwidth} />
+        <SegmentedControl
+          label="Lebar kanal (MHz)"
+          options={BANDWIDTHS}
+          value={bandwidth}
+          onChange={(v) => update({ bandwidthMHz: v })}
+        />
         <NumberField
           label="Noise figure penerima"
           unit="dB"
@@ -42,7 +48,7 @@ export default function NoiseSnr() {
           min={0}
           max={30}
           step={0.5}
-          onChange={setNoiseFigure}
+          onChange={(v) => update({ noiseFigureDb: v })}
         />
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
           <dt className="text-muted">Noise floor</dt>
