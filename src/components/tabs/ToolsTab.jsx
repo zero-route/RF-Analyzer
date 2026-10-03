@@ -3,15 +3,19 @@
 import UnitConverter from "@/components/tools/UnitConverter";
 import MismatchCalculator from "@/components/tools/MismatchCalculator";
 import NoiseSnr from "@/components/tools/NoiseSnr";
+import SpeedEstimate from "@/components/tools/SpeedEstimate";
 
 export default function ToolsTab() {
   return (
     <div className="grid items-start gap-4 md:grid-cols-2">
       <div className="flex flex-col gap-4">
         <UnitConverter />
-        <NoiseSnr />
+        <MismatchCalculator />
       </div>
-      <MismatchCalculator />
+      <div className="flex flex-col gap-4">
+        <NoiseSnr />
+        <SpeedEstimate />
+      </div>
     </div>
   );
 }
