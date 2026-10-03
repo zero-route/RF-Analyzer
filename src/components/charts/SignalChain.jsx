@@ -9,7 +9,7 @@ function formatDelta(delta) {
 }
 
 export default function SignalChain() {
-  const { state: s, eirp, link } = useRfModel();
+  const { state: s, eirp, link, obstructionDb } = useRfModel();
   const rows = [];
   let level = s.txDbm;
 
@@ -31,10 +31,10 @@ export default function SignalChain() {
   rows.push({ label: "EIRP", delta: null, level: eirp.eirpDbm, strong: true });
 
   level = eirp.eirpDbm - link.pathLossDb;
-  rows.push({ label: "Rugi ruang bebas", delta: -link.pathLossDb, level });
-  if (s.obstructionDb > 0) {
-    level -= s.obstructionDb;
-    rows.push({ label: "Halangan", delta: -s.obstructionDb, level });
+  rows.push({ label: "Rugi lintasan", delta: -link.pathLossDb, level });
+  if (obstructionDb > 0) {
+    level -= obstructionDb;
+    rows.push({ label: "Halangan", delta: -obstructionDb, level });
   }
   level += s.rxGainDbi;
   rows.push({ label: "Gain antena RX", delta: s.rxGainDbi, level });
