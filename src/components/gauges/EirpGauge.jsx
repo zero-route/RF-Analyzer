@@ -6,6 +6,7 @@ import StatusBadge from "./StatusBadge";
 import { useCalcStore } from "@/store/useCalcStore";
 import { computeEirp, classifyEirp } from "@/lib/rf/eirp";
 import { dbmToMw } from "@/lib/rf/units";
+import { describeStatus } from "@/lib/rf/statusInfo";
 import { formatPower } from "@/lib/utils/format";
 import { clamp } from "@/lib/utils/clamp";
 
@@ -43,6 +44,7 @@ export default function EirpGauge() {
     [txDbm, gainDbi, cableLossDb, antCount, sourceMode, phaseMode, splitterExtraDb]
   );
   const status = classifyEirp(result.eirpDbm, isolated);
+  const info = describeStatus(status.level, result.eirpDbm);
   const t = toT(result.eirpDbm);
   const [px0, py0] = point(t, R - 14);
   const [px1, py1] = point(t, R + 6);
@@ -83,6 +85,10 @@ export default function EirpGauge() {
         <dt className="text-muted">Gain susunan</dt>
         <dd className="num text-right text-ink">{result.arrayGainDb.toFixed(1)} dB</dd>
       </dl>
+      <div className="mt-4 border-t border-line pt-4">
+        <p className="text-sm font-medium text-ink">{info.title}</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted">{info.body}</p>
+      </div>
     </Card>
   );
 }

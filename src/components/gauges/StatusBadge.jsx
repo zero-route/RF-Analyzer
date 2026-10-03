@@ -1,14 +1,19 @@
-import Badge from "@/components/ui/Badge";
-
-const TONES = {
-  safe: "safe",
-  isolated: "safe",
-  permit: "permit",
-  danger: "danger",
+const STYLES = {
+  safe: "bg-ok-soft text-ok",
+  isolated: "bg-ok-soft text-ok",
+  permit: "bg-warn-soft text-warn",
+  danger: "bg-bad-soft text-bad",
 };
 
 function Icon({ level }) {
-  const common = { width: 12, height: 12, viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 1.75 };
+  const common = {
+    width: 13,
+    height: 13,
+    viewBox: "0 0 16 16",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.75,
+  };
   if (level === "danger") {
     return (
       <svg {...common}>
@@ -35,8 +40,13 @@ function Icon({ level }) {
 
 export default function StatusBadge({ level, label }) {
   return (
-    <Badge tone={TONES[level] ?? "neutral"} icon={<Icon level={level} />}>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
+        STYLES[level] ?? "bg-sunken text-muted"
+      }`}
+    >
+      <Icon level={level} />
       {label}
-    </Badge>
+    </span>
   );
 }
