@@ -4,7 +4,7 @@ import Card from "@/components/ui/Card";
 import { useRfModel } from "@/hooks/useRfModel";
 import { useIsDark } from "@/hooks/useIsDark";
 import { beamwidths, lobeRadius } from "@/lib/rf/pattern";
-import { fsplDb } from "@/lib/rf/fspl";
+import { pathExponent, pathLossDb, totalObstructionDb } from "@/lib/rf/propagation";
 import { rampColor } from "@/lib/utils/colorRamp";
 import { clamp } from "@/lib/utils/clamp";
 import { formatLength } from "@/lib/utils/format";
@@ -16,6 +16,8 @@ const SPAN_DB = 50;
 export default function CoverageMap() {
   const { state: s, eirp, range } = useRfModel();
   const dark = useIsDark();
+  const exponent = pathExponent(s);
+  const obstruction = totalObstructionDb(s);
   const bw = beamwidths({ type: s.antennaType, gainDbi: s.gainDbi, sectorH: s.sectorH });
   const finite = Number.isFinite(range) ? range : 100;
   const half = clamp(finite * 1.2, 5, 5000);
@@ -33,8 +35,8 @@ export default function CoverageMap() {
       const rx =
         eirp.eirpDbm +
         10 * Math.log10(Math.max(rel, 1e-3)) -
-        fsplDb(d, s.freqMHz) -
-        s.obstructionDb +
+        pathLossDb(d, s.freqMHz, exponent) -
+        obstruction +
         s.rxGainDbi -
         s.rxCableLossDb;
       if (rx < low) continue;
