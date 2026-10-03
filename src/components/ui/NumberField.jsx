@@ -40,7 +40,7 @@ export default function NumberField({
           onBlur={() => setDraft(null)}
           className="num w-full min-w-0 bg-transparent text-sm text-ink outline-none"
         />
-        {unit && <span className="ml-2 text-sm text-faint">{unit}</span>}
+        {unit && <span className="ml-2 shrink-0 whitespace-nowrap text-sm text-faint">{unit}</span>}
       </div>
     </div>
   );
