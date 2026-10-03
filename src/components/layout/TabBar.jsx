@@ -7,6 +7,7 @@ export const TABS = [
   { id: "pattern", label: "Pola" },
   { id: "link", label: "Link" },
   { id: "coverage", label: "Jangkauan" },
+  { id: "channel", label: "Kanal" },
   { id: "safety", label: "Keamanan" },
   { id: "compare", label: "Bandingkan" },
   { id: "tools", label: "Alat" },
