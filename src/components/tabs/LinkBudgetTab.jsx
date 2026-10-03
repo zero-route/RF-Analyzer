@@ -1,6 +1,7 @@
 "use client";
 
 import Badge from "@/components/ui/Badge";
+import PropagationInput from "@/components/controls/PropagationInput";
 import Card from "@/components/ui/Card";
 import NumberField from "@/components/ui/NumberField";
 import Slider from "@/components/ui/Slider";
@@ -29,6 +30,7 @@ export default function LinkBudgetTab() {
   return (
     <div className="grid items-start gap-4 md:grid-cols-2">
       <div className="flex flex-col gap-4">
+        <PropagationInput />
         <Card title="Parameter link">
           <div className="grid gap-5">
             <NumberField
@@ -41,7 +43,7 @@ export default function LinkBudgetTab() {
               onChange={(v) => update({ distanceM: v })}
             />
             <Slider
-              label="Halangan"
+              label="Halangan lain"
               value={state.obstructionDb}
               min={0}
               max={40}
@@ -120,7 +122,7 @@ export default function LinkBudgetTab() {
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
             <dt className="text-muted">Daya terima</dt>
             <dd className="num text-right text-ink">{link.rxPowerDbm.toFixed(1)} dBm</dd>
-            <dt className="text-muted">Rugi ruang bebas</dt>
+            <dt className="text-muted">Rugi lintasan</dt>
             <dd className="num text-right text-ink">{link.pathLossDb.toFixed(1)} dB</dd>
             <dt className="text-muted">Margin (setelah fade)</dt>
             <dd className="num text-right text-ink">{link.marginDb.toFixed(1)} dB</dd>
