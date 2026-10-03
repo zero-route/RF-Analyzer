@@ -12,6 +12,10 @@ export const metadata = {
   description:
     "Hitung EIRP, link budget, pola radiasi, dan jarak aman paparan RF untuk antena Wi-Fi 2.4/5 GHz.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+  },
 };
 
 export const viewport = {
