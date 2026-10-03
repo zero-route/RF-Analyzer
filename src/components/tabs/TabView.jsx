@@ -5,6 +5,7 @@ import SummaryTab from "./SummaryTab";
 import PatternTab from "./PatternTab";
 import LinkBudgetTab from "./LinkBudgetTab";
 import CoverageTab from "./CoverageTab";
+import ChannelTab from "./ChannelTab";
 import SafetyTab from "./SafetyTab";
 import CompareTab from "./CompareTab";
 import ToolsTab from "./ToolsTab";
@@ -14,6 +15,7 @@ const VIEWS = {
   pattern: PatternTab,
   link: LinkBudgetTab,
   coverage: CoverageTab,
+  channel: ChannelTab,
   safety: SafetyTab,
   compare: CompareTab,
   tools: ToolsTab,
