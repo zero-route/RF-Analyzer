@@ -19,6 +19,14 @@ export const DEFAULTS = {
   fadeMarginDb: 10,
   antennaType: "omni",
   sectorH: 90,
+  environment: "free",
+  wallDrywall: 0,
+  wallWood: 0,
+  wallGlass: 0,
+  wallBrick: 0,
+  wallConcrete: 0,
+  bandwidthMHz: 20,
+  noiseFigureDb: 6,
   activeTab: "summary",
 };
 

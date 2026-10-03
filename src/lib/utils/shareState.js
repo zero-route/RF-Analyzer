@@ -22,6 +22,14 @@ export const SHARE_SCHEMA = {
   fadeMarginDb: num(0, 30),
   antennaType: pick("omni", "sector", "directional"),
   sectorH: num(30, 180),
+  environment: pick("free", "outdoor", "indoor"),
+  wallDrywall: num(0, 20),
+  wallWood: num(0, 20),
+  wallGlass: num(0, 20),
+  wallBrick: num(0, 20),
+  wallConcrete: num(0, 20),
+  bandwidthMHz: num(20, 160),
+  noiseFigureDb: num(0, 30),
 };
 
 export function sanitizeState(input) {

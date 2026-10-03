@@ -2,6 +2,7 @@ import { computeEirp, classifyEirp } from "./eirp";
 import { computeLinkBudget, maxRangeM } from "./linkBudget";
 import { safeDistanceM } from "./exposure";
 import { dbmToMw } from "./units";
+import { pathExponent, totalObstructionDb } from "./propagation";
 
 export function computeScenario(state) {
   const eirp = computeEirp(state);
@@ -9,11 +10,12 @@ export function computeScenario(state) {
   const params = {
     eirpDbm: eirp.eirpDbm,
     freqMHz: state.freqMHz,
-    obstructionDb: state.obstructionDb,
+    obstructionDb: totalObstructionDb(state),
     rxGainDbi: state.rxGainDbi,
     rxCableLossDb: state.rxCableLossDb,
     fadeMarginDb: state.fadeMarginDb,
     rxSensitivityDbm: state.rxSensitivityDbm,
+    pathExponent: pathExponent(state),
   };
   const link = computeLinkBudget({ ...params, distanceM: state.distanceM });
 
