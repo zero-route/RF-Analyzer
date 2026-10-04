@@ -3,7 +3,7 @@
 import Button from "@/components/ui/Button";
 import ThemeToggle from "./ThemeToggle";
 
-export default function Header({ onOpenInputs }) {
+export default function Header({ onOpenInputs, collapsed, onToggleSidebar }) {
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-bg px-4 md:px-8">
       <div className="flex items-baseline gap-2">
@@ -11,6 +11,9 @@ export default function Header({ onOpenInputs }) {
         <span className="hidden text-sm text-faint sm:inline">Link budget dan pola antena</span>
       </div>
       <div className="flex items-center gap-1">
+        <Button variant="secondary" size="sm" onClick={onToggleSidebar} className="hidden md:inline-flex">
+          {collapsed ? "Tampilkan panel" : "Sembunyikan panel"}
+        </Button>
         <Button variant="secondary" size="sm" onClick={onOpenInputs} className="md:hidden">
           Input
         </Button>
