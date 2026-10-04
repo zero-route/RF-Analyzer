@@ -1,8 +1,9 @@
 import { fsplDb } from "./fspl";
 import { WALL_TYPES } from "./propagation";
 
-export const LEVEL_T = [0.15, 0.35, 0.55, 0.75, 0.95];
-export const GOOD_DBM = -70;
+export const LEVEL_COLORS = ["rgba(225, 40, 30, 0.72)", "rgba(250, 200, 20, 0.72)", "rgba(30, 90, 255, 0.72)"];
+export const STRONG_DBM = -60;
+export const MEDIUM_DBM = -75;
 
 export function wallLossFor(type, freqMHz) {
   const wall = WALL_TYPES.find((w) => w.key === type);
@@ -12,11 +13,9 @@ export function wallLossFor(type, freqMHz) {
 
 export function legendItems(sensitivityDbm) {
   return [
-    { level: 4, label: "≥ −50 dBm" },
-    { level: 3, label: "−50 sampai −60" },
-    { level: 2, label: "−60 sampai −70" },
-    { level: 1, label: "−70 sampai −80" },
-    { level: 0, label: `−80 sampai ${sensitivityDbm}` },
+    { level: 2, label: "Kuat, dekat AP (≥ −60 dBm)" },
+    { level: 1, label: "Menengah (−60 sampai −75)" },
+    { level: 0, label: `Lemah, jauh (−75 sampai ${sensitivityDbm})` },
   ];
 }
 
@@ -33,12 +32,10 @@ export function segmentsIntersect(ax, ay, bx, by, cx, cy, dx, dy) {
 }
 
 function levelOf(rx, sensitivityDbm) {
-  if (rx >= -50) return 4;
-  if (rx >= -60) return 3;
-  if (rx >= -70) return 2;
-  if (rx >= -80) return 1;
-  if (rx >= sensitivityDbm) return 0;
-  return -1;
+  if (rx < sensitivityDbm) return -1;
+  if (rx >= STRONG_DBM) return 2;
+  if (rx >= MEDIUM_DBM) return 1;
+  return 0;
 }
 
 export function computeHeatmap({
@@ -84,7 +81,7 @@ export function computeHeatmap({
       const level = levelOf(best, sensitivityDbm);
       levels[r * cols + c] = level;
       if (level >= 0) covered += 1;
-      if (best >= GOOD_DBM) good += 1;
+      if (best >= STRONG_DBM) good += 1;
     }
   }
 
