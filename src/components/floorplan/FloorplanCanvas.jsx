@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFloorplanStore } from "@/store/useFloorplanStore";
-import { LEVEL_T } from "@/lib/rf/floorplan";
-import { rampColor } from "@/lib/utils/colorRamp";
+import { LEVEL_COLORS } from "@/lib/rf/floorplan";
 import { clamp } from "@/lib/utils/clamp";
 
 const SNAP = 0.5;
@@ -17,7 +16,7 @@ const WALL_STYLE = {
   wallConcrete: { w: 5.5, dash: undefined },
 };
 
-export default function FloorplanCanvas({ tool, wallType, heat, dark }) {
+export default function FloorplanCanvas({ tool, wallType, heat }) {
   const { widthM: W, heightM: H, walls, aps, addWall, addAp, moveAp, removeWall, removeAp } = useFloorplanStore();
   const svgRef = useRef(null);
   const canvasRef = useRef(null);
@@ -35,11 +34,11 @@ export default function FloorplanCanvas({ tool, wallType, heat, dark }) {
       for (let c = 0; c < heat.cols; c += 1) {
         const level = heat.levels[r * heat.cols + c];
         if (level < 0) continue;
-        ctx.fillStyle = rampColor(LEVEL_T[level], dark);
+        ctx.fillStyle = LEVEL_COLORS[level];
         ctx.fillRect(c, r, 1, 1);
       }
     }
-  }, [heat, dark]);
+  }, [heat]);
 
   function toPoint(e) {
     const rect = svgRef.current.getBoundingClientRect();
