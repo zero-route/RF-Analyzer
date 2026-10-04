@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFloorplanStore } from "@/store/useFloorplanStore";
-import { LEVEL_COLORS } from "@/lib/rf/floorplan";
+import { LEVEL_COLORS, clientLabel } from "@/lib/rf/floorplan";
 import { clamp } from "@/lib/utils/clamp";
+import { formatRate } from "@/lib/rf/throughput";
 
 const SNAP = 0.5;
 const snap = (v) => Math.round(v / SNAP) * SNAP;
@@ -16,12 +17,14 @@ const WALL_STYLE = {
   wallConcrete: { w: 5.5, dash: undefined },
 };
 
-export default function FloorplanCanvas({ tool, wallType, heat }) {
-  const { widthM: W, heightM: H, walls, aps, addWall, addAp, moveAp, removeWall, removeAp } = useFloorplanStore();
+export default function FloorplanCanvas({ tool, wallType, clientKind, heat, results, selectedApId, onSelectAp }) {
+  const store = useFloorplanStore();
+  const { widthM: W, heightM: H, walls, aps, clients } = store;
   const svgRef = useRef(null);
   const canvasRef = useRef(null);
   const [draft, setDraft] = useState(null);
-  const [dragId, setDragId] = useState(null);
+  const [drag, setDrag] = useState(null);
+  const u = Math.max(W, H) / 40;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,7 +58,10 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
       setDraft({ x1: x, y1: y, x2: x, y2: y });
     } else if (tool === "ap") {
       const [x, y] = toPoint(e);
-      addAp(x, y);
+      store.addAp(x, y);
+    } else if (tool === "client") {
+      const [x, y] = toPoint(e);
+      store.addClient(x, y, clientKind);
     }
   }
 
@@ -63,23 +69,33 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
     if (tool === "wall" && draft) {
       const [x, y] = toPoint(e);
       setDraft({ ...draft, x2: x, y2: y });
-    } else if (tool === "select" && dragId) {
+    } else if (tool === "select" && drag) {
       const [x, y] = toPoint(e);
-      moveAp(dragId, x, y);
+      if (drag.type === "ap") store.moveAp(drag.id, x, y);
+      else store.moveClient(drag.id, x, y);
     }
   }
 
   function onUp() {
     if (draft) {
-      if (Math.hypot(draft.x2 - draft.x1, draft.y2 - draft.y1) >= SNAP) addWall({ ...draft, type: wallType });
+      if (Math.hypot(draft.x2 - draft.x1, draft.y2 - draft.y1) >= SNAP) store.addWall({ ...draft, type: wallType });
       setDraft(null);
     }
-    setDragId(null);
+    setDrag(null);
+  }
+
+  function startDrag(e, type, id) {
+    e.stopPropagation();
+    svgRef.current.setPointerCapture(e.pointerId);
+    setDrag({ type, id });
+    if (type === "ap") onSelectAp(id);
   }
 
   const gridPath = [];
   for (let x = 1; x < W; x += 1) gridPath.push(`M${x},0V${H}`);
   for (let y = 1; y < H; y += 1) gridPath.push(`M0,${y}H${W}`);
+
+  const hitCursor = tool === "select" ? "grab" : tool === "erase" ? "pointer" : "default";
 
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-line bg-surface">
@@ -102,7 +118,7 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
         onPointerUp={onUp}
         onPointerCancel={onUp}
         role="img"
-        aria-label="Denah ruangan dan peta sinyal"
+        aria-label="Denah ruangan, peta sinyal, dan penerima"
       >
         <path d={gridPath.join("")} stroke="var(--line)" strokeWidth="1" vectorEffect="non-scaling-stroke" opacity="0.6" fill="none" />
 
@@ -133,7 +149,7 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
                   style={{ cursor: "pointer" }}
                   onPointerDown={(e) => {
                     e.stopPropagation();
-                    removeWall(wall.id);
+                    store.removeWall(wall.id);
                   }}
                 />
               )}
@@ -155,9 +171,9 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
             />
             <text
               x={(draft.x1 + draft.x2) / 2}
-              y={(draft.y1 + draft.y2) / 2 - 0.3}
+              y={(draft.y1 + draft.y2) / 2 - u}
               textAnchor="middle"
-              fontSize="0.55"
+              fontSize={u * 1.3}
               fill="var(--ink)"
               className="num"
             >
@@ -166,26 +182,77 @@ export default function FloorplanCanvas({ tool, wallType, heat }) {
           </g>
         )}
 
+        {clients.map((client, i) => {
+          const res = results[i];
+          const connected = res?.connected;
+          return (
+            <g key={client.id}>
+              <rect
+                x={client.x - u}
+                y={client.y - u}
+                width={u * 2}
+                height={u * 2}
+                rx={u * 0.4}
+                fill="var(--surface)"
+                stroke="var(--ink)"
+                strokeWidth="2"
+                strokeDasharray={connected ? undefined : "3 2"}
+                vectorEffect="non-scaling-stroke"
+              />
+              <text x={client.x} y={client.y - u * 1.5} textAnchor="middle" fontSize={u * 1.15} fill="var(--ink)" className="num">
+                {clientLabel(clients, i)}
+              </text>
+              <text x={client.x} y={client.y + u * 2.5} textAnchor="middle" fontSize={u * 1.1} fill="var(--muted)" className="num">
+                {connected ? formatRate(res.deliveredMbps) : "putus"}
+              </text>
+              <rect
+                x={client.x - u * 2.2}
+                y={client.y - u * 2.2}
+                width={u * 4.4}
+                height={u * 4.4}
+                fill="transparent"
+                style={{ touchAction: "none", cursor: hitCursor }}
+                onPointerDown={(e) => {
+                  if (tool === "select") startDrag(e, "client", client.id);
+                  else if (tool === "erase") {
+                    e.stopPropagation();
+                    store.removeClient(client.id);
+                  }
+                }}
+              />
+            </g>
+          );
+        })}
+
         {aps.map((ap, i) => (
           <g key={ap.id}>
-            <circle cx={ap.x} cy={ap.y} r="0.32" fill="var(--ink)" stroke="var(--surface)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
-            <text x={ap.x} y={ap.y - 0.55} textAnchor="middle" fontSize="0.5" fill="var(--ink)" className="num">
+            {ap.id === selectedApId && (
+              <circle
+                cx={ap.x}
+                cy={ap.y}
+                r={u * 1.9}
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth="1.5"
+                strokeDasharray="3 3"
+                vectorEffect="non-scaling-stroke"
+              />
+            )}
+            <circle cx={ap.x} cy={ap.y} r={u} fill="var(--ink)" stroke="var(--surface)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+            <text x={ap.x} y={ap.y - u * 2.2} textAnchor="middle" fontSize={u * 1.15} fill="var(--ink)" className="num">
               AP{i + 1}
             </text>
             <circle
               cx={ap.x}
               cy={ap.y}
-              r="0.75"
+              r={u * 2.4}
               fill="transparent"
-              style={{ touchAction: "none", cursor: tool === "select" ? "grab" : tool === "erase" ? "pointer" : "default" }}
+              style={{ touchAction: "none", cursor: hitCursor }}
               onPointerDown={(e) => {
-                if (tool === "select") {
+                if (tool === "select") startDrag(e, "ap", ap.id);
+                else if (tool === "erase") {
                   e.stopPropagation();
-                  svgRef.current.setPointerCapture(e.pointerId);
-                  setDragId(ap.id);
-                } else if (tool === "erase") {
-                  e.stopPropagation();
-                  removeAp(ap.id);
+                  store.removeAp(ap.id);
                 }
               }}
             />
