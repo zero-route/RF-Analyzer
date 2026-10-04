@@ -8,13 +8,18 @@ import { useUrlState } from "@/hooks/useUrlState";
 
 export default function Shell({ sidebar, children }) {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   useUrlState();
 
   return (
     <div className="min-h-dvh">
-      <Header onOpenInputs={() => setOpen(true)} />
-      <div className="md:grid md:grid-cols-[300px_minmax(0,1fr)]">
-        <Sidebar open={open} onClose={() => setOpen(false)}>
+      <Header
+        onOpenInputs={() => setOpen(true)}
+        collapsed={collapsed}
+        onToggleSidebar={() => setCollapsed((v) => !v)}
+      />
+      <div className={collapsed ? "" : "md:grid md:grid-cols-[300px_minmax(0,1fr)]"}>
+        <Sidebar open={open} onClose={() => setOpen(false)} collapsed={collapsed}>
           {sidebar}
         </Sidebar>
         <main className="min-w-0 px-4 pb-24 pt-4 md:px-8 md:pb-10 md:pt-6">
