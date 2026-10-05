@@ -26,7 +26,7 @@ export default function Tooltip({ text, label = "Info" }) {
         <span
           id={id}
           role="tooltip"
-          className="absolute right-0 top-7 z-20 w-56 rounded-md border border-line bg-surface p-3 text-xs leading-relaxed text-muted shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          className="absolute left-0 top-7 z-20 w-64 rounded-md border border-line bg-surface p-3 text-xs leading-relaxed text-muted shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
           {text}
         </span>
