@@ -6,17 +6,19 @@ import SegmentedControl from "@/components/ui/SegmentedControl";
 import ChannelChart from "@/components/channel/ChannelChart";
 import { useCalcStore } from "@/store/useCalcStore";
 import { CHANNEL_BANDS, bandForFreq, buildChannels, channelAt } from "@/lib/data/channels";
+import { getRegion } from "@/lib/data/regulations";
 
 export default function ChannelTab() {
   const freqMHz = useCalcStore((s) => s.freqMHz);
   const update = useCalcStore((s) => s.update);
+  const regionId = useCalcStore((s) => s.region);
   const [bandChoice, setBandChoice] = useState(null);
   const [widthChoice, setWidthChoice] = useState(20);
 
   const bandId = bandChoice ?? bandForFreq(freqMHz);
   const band = CHANNEL_BANDS.find((b) => b.id === bandId);
   const width = band.widths.includes(widthChoice) ? widthChoice : 20;
-  const channels = buildChannels(band.id, width);
+  const channels = buildChannels(band.id, width, getRegion(regionId));
   const current = channelAt(channels, freqMHz);
   const dfsCount = channels.filter((c) => c.dfs).length;
   const clearCount = channels.filter((c) => c.clear).length;
