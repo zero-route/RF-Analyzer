@@ -2,9 +2,11 @@
 
 import { useId, useState } from "react";
 import { clamp } from "@/lib/utils/clamp";
+import InfoTip from "./InfoTip";
 
 export default function NumberField({
   label,
+  tip,
   value,
   onChange,
   min = -Infinity,
@@ -24,9 +26,12 @@ export default function NumberField({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-muted">
-        {label}
-      </label>
+      <span className="flex items-center gap-1.5">
+        <label htmlFor={id} className="text-sm text-muted">
+          {label}
+        </label>
+        {tip && <InfoTip term={tip} />}
+      </span>
       <div className="flex h-10 items-center rounded-md border border-line bg-surface px-3 focus-within:border-accent">
         <input
           id={id}
