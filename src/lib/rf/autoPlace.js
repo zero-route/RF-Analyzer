@@ -1,5 +1,5 @@
 import { fsplDb } from "./fspl";
-import { STRONG_DBM, channelOverlap, segmentsIntersect, wallLossFor } from "./floorplan";
+import { channelOverlap, segmentsIntersect, wallLossFor } from "./floorplan";
 import { bandForFreq, buildChannels } from "../data/channels";
 
 export function suggestApPositions({
@@ -29,8 +29,7 @@ export function suggestApPositions({
 
   const losses = walls.map((w) => wallLossFor(w.type, freqMHz));
   const offset = eirpDbm + rxGainDbi - rxCableLossDb;
-  const span = Math.max(STRONG_DBM - sensitivityDbm, 1);
-  const utility = (rx) => (rx < sensitivityDbm ? 0 : Math.min(1, (rx - sensitivityDbm) / span));
+  const utility = (rx) => (rx < sensitivityDbm ? 0 : 1 + Math.min(rx - sensitivityDbm, 80) / 80);
 
   const signals = candidates.map(([cx, cy]) => {
     const arr = new Float32Array(cells.length);
@@ -58,6 +57,8 @@ export function suggestApPositions({
       if (used.has(idx)) return;
       let score = 0;
       for (let i = 0; i < arr.length; i += 1) score += utility(Math.max(best[i], arr[i]));
+      const [cx, cy] = candidates[idx];
+      score -= 1e-6 * ((cx - widthM / 2) ** 2 + (cy - heightM / 2) ** 2);
       if (score > bestScore) {
         bestScore = score;
         bestIndex = idx;
