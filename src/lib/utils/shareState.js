@@ -30,6 +30,10 @@ export const SHARE_SCHEMA = {
   wallConcrete: num(0, 20),
   bandwidthMHz: num(20, 160),
   noiseFigureDb: num(0, 30),
+  region: pick("eu", "us", "id"),
+  customLimit24: num(0, 60),
+  customLimit5Low: num(0, 60),
+  customLimit5High: num(0, 60),
 };
 
 export function sanitizeState(input) {
