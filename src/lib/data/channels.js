@@ -43,9 +43,9 @@ function chunk(run, size) {
 const RUNS_5 = [range(36, 64, 4), range(100, 144, 4), range(149, 165, 4)];
 const isDfs = (ch) => (ch >= 52 && ch <= 64) || (ch >= 100 && ch <= 144);
 
-export function buildChannels(bandId, widthMHz) {
+export function buildChannels(bandId, widthMHz, region) {
   if (bandId === "24") {
-    return range(1, 13, 1).map((ch) => ({
+    return range(1, region?.ch24Max ?? 13, 1).map((ch) => ({
       key: `24-${ch}`,
       label: String(ch),
       centerMHz: 2407 + 5 * ch,
@@ -56,7 +56,7 @@ export function buildChannels(bandId, widthMHz) {
   }
 
   const base = bandId === "5" ? 5000 : 5950;
-  const runs = bandId === "5" ? RUNS_5 : [range(1, 233, 4)];
+  const runs = bandId === "5" ? RUNS_5 : [range(1, region?.ch6Max ?? 233, 4)];
   const size = Math.max(1, Math.round(widthMHz / 20));
 
   return runs
