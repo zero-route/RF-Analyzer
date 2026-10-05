@@ -2,6 +2,7 @@ import { fsplDb } from "./fspl";
 import { WALL_TYPES } from "./propagation";
 import { noiseFloorDbm } from "./tools";
 import { estimateRate } from "./throughput";
+import { bandForFreq, buildChannels } from "../data/channels";
 
 export const LEVEL_COLORS = ["rgba(225, 40, 30, 0.72)", "rgba(250, 200, 20, 0.72)", "rgba(30, 90, 255, 0.72)"];
 export const DEFAULT_AP_RATE = 300;
@@ -12,6 +13,7 @@ export const CLIENT_KINDS = [
 ];
 export const STRONG_DBM = -60;
 export const MEDIUM_DBM = -75;
+const INTERFERENCE_MARGIN_DB = 10;
 
 export function wallLossFor(type, freqMHz) {
   const wall = WALL_TYPES.find((w) => w.key === type);
@@ -46,6 +48,59 @@ function levelOf(rx, sensitivityDbm) {
   return 0;
 }
 
+export function channelOverlap(a, b, widthMHz) {
+  return Math.max(0, 1 - Math.abs(a - b) / Math.max(widthMHz, 1));
+}
+
+function isActive(ap) {
+  return (ap.rateMbps ?? DEFAULT_AP_RATE) > 0;
+}
+
+export function resolveAps(aps, freqMHz) {
+  const channels = buildChannels(bandForFreq(freqMHz), 20);
+  let fallback = channels[0]?.centerMHz ?? freqMHz;
+  for (const c of channels) {
+    if (Math.abs(c.centerMHz - freqMHz) < Math.abs(fallback - freqMHz)) fallback = c.centerMHz;
+  }
+  return aps.map((ap) => ({ ...ap, chMHz: ap.chMHz ?? fallback }));
+}
+
+function signalsAt(aps, px, py, walls, losses, freqMHz, offset) {
+  return aps.map((ap) => {
+    const d = Math.max(Math.hypot(px - ap.x, py - ap.y), 0.5);
+    let loss = fsplDb(d, freqMHz);
+    for (let i = 0; i < walls.length; i += 1) {
+      const w = walls[i];
+      if (segmentsIntersect(ap.x, ap.y, px, py, w.x1, w.y1, w.x2, w.y2)) loss += losses[i];
+    }
+    return offset - loss;
+  });
+}
+
+function strongest(values) {
+  let best = -Infinity;
+  let index = -1;
+  values.forEach((v, i) => {
+    if (v > best) {
+      best = v;
+      index = i;
+    }
+  });
+  return { best, index };
+}
+
+function interferenceFor(aps, rxs, servingIndex, bandwidthMHz) {
+  let intf = -Infinity;
+  for (let j = 0; j < aps.length; j += 1) {
+    if (j === servingIndex || !isActive(aps[j])) continue;
+    const overlap = channelOverlap(aps[servingIndex].chMHz, aps[j].chMHz, bandwidthMHz);
+    if (overlap <= 0) continue;
+    const effective = rxs[j] + 10 * Math.log10(overlap);
+    if (effective > intf) intf = effective;
+  }
+  return intf;
+}
+
 export function computeHeatmap({
   walls,
   aps,
@@ -56,40 +111,38 @@ export function computeHeatmap({
   rxGainDbi,
   rxCableLossDb,
   sensitivityDbm,
+  bandwidthMHz = 20,
 }) {
   const cell = (widthM * heightM) / 0.25 > 6000 ? 1 : 0.5;
   const cols = Math.ceil(widthM / cell);
   const rows = Math.ceil(heightM / cell);
   const levels = new Int8Array(cols * rows).fill(-1);
+  const interference = new Uint8Array(cols * rows);
 
-  if (aps.length === 0) return { cols, rows, cell, levels, stats: null };
+  if (aps.length === 0) return { cols, rows, cell, levels, interference, stats: null };
 
   const losses = walls.map((w) => wallLossFor(w.type, freqMHz));
   const offset = eirpDbm + rxGainDbi - rxCableLossDb;
   let covered = 0;
   let good = 0;
+  let disturbed = 0;
 
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
-      const px = (c + 0.5) * cell;
-      const py = (r + 0.5) * cell;
-      let best = -Infinity;
-
-      for (const ap of aps) {
-        const d = Math.max(Math.hypot(px - ap.x, py - ap.y), 0.5);
-        let loss = fsplDb(d, freqMHz);
-        for (let i = 0; i < walls.length; i += 1) {
-          const w = walls[i];
-          if (segmentsIntersect(ap.x, ap.y, px, py, w.x1, w.y1, w.x2, w.y2)) loss += losses[i];
-        }
-        const rx = offset - loss;
-        if (rx > best) best = rx;
-      }
-
+      const rxs = signalsAt(aps, (c + 0.5) * cell, (r + 0.5) * cell, walls, losses, freqMHz, offset);
+      const { best, index } = strongest(rxs);
       const level = levelOf(best, sensitivityDbm);
       levels[r * cols + c] = level;
       if (level >= 0) covered += 1;
       if (best >= STRONG_DBM) good += 1;
+
+      if (level >= 0 && aps.length > 1) {
+        const intf = interferenceFor(aps, rxs, index, bandwidthMHz);
+        if (intf >= sensitivityDbm && best - intf < INTERFERENCE_MARGIN_DB) {
+          interference[r * cols + c] = 1;
+          disturbed += 1;
+        }
+      }
     }
   }
 
@@ -99,7 +152,12 @@ export function computeHeatmap({
     rows,
     cell,
     levels,
-    stats: { coveragePct: (covered / total) * 100, goodPct: (good / total) * 100 },
+    interference,
+    stats: {
+      coveragePct: (covered / total) * 100,
+      goodPct: (good / total) * 100,
+      interferencePct: (disturbed / total) * 100,
+    },
   };
 }
 
@@ -127,25 +185,19 @@ export function computeClients({
   const offset = eirpDbm + rxGainDbi - rxCableLossDb;
 
   const links = clients.map((client) => {
-    let best = -Infinity;
-    let apIndex = -1;
-    aps.forEach((ap, i) => {
-      const d = Math.max(Math.hypot(client.x - ap.x, client.y - ap.y), 0.5);
-      let loss = fsplDb(d, freqMHz);
-      for (let k = 0; k < walls.length; k += 1) {
-        const w = walls[k];
-        if (segmentsIntersect(ap.x, ap.y, client.x, client.y, w.x1, w.y1, w.x2, w.y2)) loss += losses[k];
-      }
-      const rx = offset - loss;
-      if (rx > best) {
-        best = rx;
-        apIndex = i;
-      }
-    });
+    const rxs = signalsAt(aps, client.x, client.y, walls, losses, freqMHz, offset);
+    const { best, index } = strongest(rxs);
     const kind = CLIENT_KINDS.find((k) => k.id === client.kind) ?? CLIENT_KINDS[0];
-    const snrDb = best - floor;
-    const rate = apIndex >= 0 && best >= sensitivityDbm ? estimateRate(snrDb, bandwidthMHz, kind.streams) : null;
-    return { apIndex, rxDbm: best, snrDb, rate };
+    let snrDb = best - floor;
+    if (index >= 0) {
+      const intf = interferenceFor(aps, rxs, index, bandwidthMHz);
+      if (Number.isFinite(intf)) {
+        const noiseMw = Math.pow(10, floor / 10) + Math.pow(10, intf / 10);
+        snrDb = best - 10 * Math.log10(noiseMw);
+      }
+    }
+    const rate = index >= 0 && best >= sensitivityDbm ? estimateRate(snrDb, bandwidthMHz, kind.streams) : null;
+    return { apIndex: index, rxDbm: best, snrDb, rate };
   });
 
   const counts = aps.map(() => 0);
@@ -155,7 +207,17 @@ export function computeClients({
 
   return links.map((l) => {
     if (!l.rate) {
-      return { connected: false, apIndex: l.apIndex, rxDbm: l.rxDbm, snrDb: l.snrDb, linkMbps: 0, deliveredMbps: 0, deliveryPct: 0, mcsName: null, sharedBy: 0 };
+      return {
+        connected: false,
+        apIndex: l.apIndex,
+        rxDbm: l.rxDbm,
+        snrDb: l.snrDb,
+        linkMbps: 0,
+        deliveredMbps: 0,
+        deliveryPct: 0,
+        mcsName: null,
+        sharedBy: 0,
+      };
     }
     const offered = aps[l.apIndex].rateMbps ?? DEFAULT_AP_RATE;
     const sharedBy = counts[l.apIndex];
