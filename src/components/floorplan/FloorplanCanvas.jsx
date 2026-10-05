@@ -41,6 +41,12 @@ export default function FloorplanCanvas({ tool, wallType, clientKind, heat, resu
         ctx.fillRect(c, r, 1, 1);
       }
     }
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    for (let r = 0; r < heat.rows; r += 1) {
+      for (let c = 0; c < heat.cols; c += 1) {
+        if (heat.interference[r * heat.cols + c] && (r + c) % 2 === 0) ctx.fillRect(c, r, 1, 1);
+      }
+    }
   }, [heat]);
 
   function toPoint(e) {
@@ -86,6 +92,7 @@ export default function FloorplanCanvas({ tool, wallType, clientKind, heat, resu
 
   function startDrag(e, type, id) {
     e.stopPropagation();
+    store.snapshot();
     svgRef.current.setPointerCapture(e.pointerId);
     setDrag({ type, id });
     if (type === "ap") onSelectAp(id);
