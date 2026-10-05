@@ -27,6 +27,10 @@ export const DEFAULTS = {
   wallConcrete: 0,
   bandwidthMHz: 20,
   noiseFigureDb: 6,
+  region: "eu",
+  customLimit24: 20,
+  customLimit5Low: 23,
+  customLimit5High: 30,
   activeTab: "summary",
 };
 
