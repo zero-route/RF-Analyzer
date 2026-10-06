@@ -13,7 +13,7 @@ export default function PropagationInput() {
   const update = useCalcStore((s) => s.update);
 
   return (
-    <Card title="Lingkungan dan dinding">
+    <Card title="Lingkungan dan dinding" tip="pathloss">
       <div className="flex flex-col gap-4">
         <SegmentedControl
           label="Lingkungan"
