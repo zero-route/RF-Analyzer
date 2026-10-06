@@ -27,6 +27,7 @@ export default function AntennaInput() {
         />
         <Slider
           label="Gain"
+          tip="dbi"
           value={gainDbi}
           min={0}
           max={30}
