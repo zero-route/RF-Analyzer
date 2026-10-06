@@ -26,7 +26,7 @@ export default function ExposureRings() {
   const opacities = [0.28, 0.16, 0.07];
 
   return (
-    <Card title="Jarak aman paparan RF">
+    <Card title="Jarak aman paparan RF" tip="powerdensity">
       <div className="flex flex-col gap-4">
         <SegmentedControl
           options={EXPOSURE_LIMITS.map((l) => ({ value: l.value, label: l.label }))}
