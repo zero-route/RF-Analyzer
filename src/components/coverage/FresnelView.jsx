@@ -55,7 +55,7 @@ export default function FresnelView() {
   }
 
   return (
-    <Card title="Zona Fresnel (tampak samping)" action={<Badge tone={tone}>{label}</Badge>}>
+    <Card title="Zona Fresnel (tampak samping)" tip="fresnel" action={<Badge tone={tone}>{label}</Badge>}>
       <div className="flex flex-col gap-5">
         <svg viewBox={`0 0 ${W} ${H}`} className="block w-full" role="img" aria-label="Penampang zona Fresnel pertama">
           <rect x="0" y={GROUND} width={W} height={H - GROUND} fill="var(--sunken)" />
