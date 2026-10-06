@@ -45,7 +45,7 @@ export default function SignalChain() {
   rows.push({ label: "Daya terima", delta: null, level: link.rxPowerDbm, strong: true });
 
   return (
-    <Card title="Rantai sinyal">
+    <Card title="Rantai sinyal" tip="linkbudget">
       <ul>
         {rows.map((row, i) => (
           <li
