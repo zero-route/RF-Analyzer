@@ -24,6 +24,7 @@ export default function PowerInput() {
         {txUnit === "dbm" ? (
           <NumberField
             label="Daya TX"
+            tip="dbm"
             unit="dBm"
             value={txDbm}
             min={-30}
@@ -34,6 +35,7 @@ export default function PowerInput() {
         ) : (
           <NumberField
             label="Daya TX"
+            tip="dbm"
             unit="mW"
             value={Number(dbmToMw(txDbm).toFixed(3))}
             min={0.001}
