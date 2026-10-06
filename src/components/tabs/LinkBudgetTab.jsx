@@ -71,6 +71,7 @@ export default function LinkBudgetTab() {
             />
             <Slider
               label="Fade margin"
+            tip="fade"
               value={state.fadeMarginDb}
               min={0}
               max={30}
@@ -102,6 +103,7 @@ export default function LinkBudgetTab() {
               </div>
               <NumberField
                 label="Sensitivitas RX"
+              tip="sensitivity"
                 unit="dBm"
                 value={state.rxSensitivityDbm}
                 min={-110}
