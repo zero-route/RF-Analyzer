@@ -33,7 +33,7 @@ export default function NoiseSnr() {
   const q = quality(snr);
 
   return (
-    <Card title="Noise floor dan SNR" action={<Badge tone={q.tone}>{q.label}</Badge>}>
+    <Card title="Noise floor dan SNR" tip="snr" action={<Badge tone={q.tone}>{q.label}</Badge>}>
       <div className="flex flex-col gap-4">
         <SegmentedControl
           label="Lebar kanal (MHz)"
