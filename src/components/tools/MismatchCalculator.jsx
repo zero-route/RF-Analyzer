@@ -20,7 +20,7 @@ export default function MismatchCalculator() {
   const stats = mismatchStats(gamma);
 
   return (
-    <Card title="VSWR dan rugi ketidakcocokan">
+    <Card title="VSWR dan rugi ketidakcocokan" tip="vswr">
       <div className="flex flex-col gap-4">
         <SegmentedControl options={MODES} value={mode} onChange={setMode} />
         {mode === "vswr" ? (
