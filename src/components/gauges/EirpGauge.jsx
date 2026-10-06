@@ -50,7 +50,7 @@ export default function EirpGauge() {
   const [px1, py1] = point(t, R + 6);
 
   return (
-    <Card title="EIRP" action={<StatusBadge level={status.level} label={status.label} />}>
+    <Card title="EIRP" tip="eirp" action={<StatusBadge level={status.level} label={status.label} />}>
       <svg viewBox="0 0 240 136" className="mx-auto block w-full max-w-sm" role="img" aria-label={`EIRP ${result.eirpDbm.toFixed(1)} dBm`}>
         <path d={arc(0, 1, R)} fill="none" stroke="var(--line)" strokeWidth="3" strokeLinecap="round" />
         {t > 0.005 && (
