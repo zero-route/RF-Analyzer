@@ -36,7 +36,7 @@ export default function PowerScale() {
   const x = xAt(eirp);
 
   return (
-    <Card title="Skala daya (logaritmik)">
+    <Card title="Skala daya (logaritmik)" tip="status">
       <svg viewBox={`0 0 ${W} 72`} className="block w-full" role="img" aria-label="Posisi EIRP pada skala dBm dan mW">
         <rect x={xAt(MIN)} y="32" width={xAt(20) - xAt(MIN)} height="6" rx="3" fill="var(--line)" />
         <rect x={xAt(20)} y="32" width={xAt(30) - xAt(20)} height="6" fill="var(--faint)" />
