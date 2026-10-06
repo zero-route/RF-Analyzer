@@ -16,7 +16,7 @@ export default function RxVsDistance() {
   const low = Math.floor((Math.min(state.rxSensitivityDbm, data[data.length - 1].rx) - 5) / 10) * 10;
 
   return (
-    <Card title="Daya terima terhadap jarak">
+    <Card title="Daya terima terhadap jarak" tip="fspl">
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
