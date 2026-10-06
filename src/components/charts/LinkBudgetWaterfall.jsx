@@ -44,7 +44,7 @@ export default function LinkBudgetWaterfall() {
   const rows = buildRows(link, floor);
 
   return (
-    <Card title="Anggaran link (dBm)">
+    <Card title="Anggaran link (dBm)" tip="linkbudget">
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} margin={{ top: 18, right: 8, bottom: 0, left: 0 }}>
