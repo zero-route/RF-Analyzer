@@ -25,7 +25,7 @@ export default function SpeedEstimate() {
   const rate = estimateRate(snr, bandwidth, streams);
 
   return (
-    <Card title="Estimasi kecepatan">
+    <Card title="Estimasi kecepatan" tip="mcs">
       <div className="flex flex-col gap-4">
         <SegmentedControl label="Spatial stream" options={STREAMS} value={streams} onChange={setStreams} />
         {rate ? (
