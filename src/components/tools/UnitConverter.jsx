@@ -33,7 +33,7 @@ export default function UnitConverter() {
   ];
 
   return (
-    <Card title="Konverter satuan">
+    <Card title="Konverter satuan" tip="dbm">
       <div className="flex flex-col gap-4">
         <SegmentedControl options={UNITS} value={unit} onChange={setUnit} />
         <NumberField label="Nilai" value={value} step={1} onChange={setValue} />
