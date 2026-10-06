@@ -12,7 +12,7 @@ export default function PatternMetrics() {
   const flat = flatness(bw.h, bw.v);
 
   return (
-    <Card title="Metrik pola">
+    <Card title="Metrik pola" tip="beamwidth">
       <dl className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
         <dt className="text-muted">Lebar sinar horizontal</dt>
         <dd className="num text-right text-ink">{bw.h.toFixed(0)}°</dd>
