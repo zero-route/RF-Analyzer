@@ -174,3 +174,22 @@ input[type="number"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  .print-page {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+  }
+}
