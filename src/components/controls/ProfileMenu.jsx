@@ -25,6 +25,10 @@ export default function ProfileMenu() {
     }
   }
 
+  function openReport() {
+    window.open(`/laporan?${toSearchParams(state)}`, "_blank");
+  }
+
   function handleSave() {
     if (save(name, pickShareState(state))) setName("");
   }
@@ -32,9 +36,14 @@ export default function ProfileMenu() {
   return (
     <Card title="Profil dan bagikan">
       <div className="flex flex-col gap-4">
-        <Button variant="secondary" size="sm" onClick={copyLink} className="self-start">
-          {copied ? "Tautan tersalin" : "Salin tautan"}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" size="sm" onClick={copyLink}>
+            {copied ? "Tautan tersalin" : "Salin tautan"}
+          </Button>
+          <Button variant="secondary" size="sm" onClick={openReport}>
+            Laporan PDF
+          </Button>
+        </div>
 
         <div className="flex gap-2">
           <input
