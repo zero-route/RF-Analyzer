@@ -1,5 +1,5 @@
 {
-  "name": "RF-Analyzer",
+  "name": "Radio Frequency Analyzer",
   "short_name": "RF-A",
   "start_url": "/",
   "display": "standalone",
@@ -9,8 +9,16 @@
     {
       "src": "/icon.png",
       "sizes": "any",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
+  ],
+  "id": "/",
+  "scope": "/",
+  "lang": "id",
+  "orientation": "any",
+  "categories": [
+    "utilities",
+    "productivity"
   ]
 }
