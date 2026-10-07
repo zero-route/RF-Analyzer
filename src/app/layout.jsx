@@ -9,7 +9,7 @@ const geist = Geist({
 });
 
 export const metadata = {
-  title: "RF-Analyzer"
+  title: "RF-Analyzer",
   description:
     "Hitung EIRP, link budget, pola radiasi, dan jarak aman paparan RF untuk antena Wi-Fi 2.4/5 GHz.",
   manifest: "/manifest.json",
