@@ -1,5 +1,6 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
+import RegisterSW from "@/components/RegisterSW";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -8,13 +9,13 @@ const geist = Geist({
 });
 
 export const metadata = {
-  title: "RF-Analyzer",
+  title: "RF-Analyzer"
   description:
     "Hitung EIRP, link budget, pola radiasi, dan jarak aman paparan RF untuk antena Wi-Fi 2.4/5 GHz.",
   manifest: "/manifest.json",
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    shortcut: "/icon.svg",
+    icon: [{ url: "/icon.png", type: "image/svg+xml" }],
+    shortcut: "/icon.png",
   },
 };
 
@@ -35,7 +36,10 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <RegisterSW />
+      </body>
     </html>
   );
 }
