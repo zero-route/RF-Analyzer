@@ -1,6 +1,6 @@
-# EIRP Calculator
+# Radio Frequency Analyzer
 
-Kalkulator EIRP, link budget, pola antena, jangkauan, kanal Wi-Fi, dan perencana denah sinyal. Dibangun dengan Next.js (App Router, JSX) dan di-deploy ke Vercel. Semua perhitungan berjalan di browser, tidak ada server atau akun.
+Kalkulator Radio Frequency, link budget, pola antena, jangkauan, kanal Wi-Fi, dan perencana denah sinyal. Dibangun dengan Next.js (App Router, JSX) dan di-deploy ke Vercel. Semua perhitungan berjalan di browser, tidak ada server atau akun.
 
 ## Menjalankan
 
@@ -24,12 +24,20 @@ Buka http://localhost:3000.
 - **Ringkasan**: angka kunci, gauge EIRP, skala daya, rantai sinyal
 - **Pola**: lobe 3D, potongan azimuth dan elevasi, metrik lebar sinar
 - **Link**: lingkungan dan dinding, link budget, jangkauan maksimum
-- **Jangkauan**: peta cakupan dan zona Fresnel
+- **Jangkauan**: peta cakupan, zona Fresnel, dan tinggi menara minimum (lengkung bumi)
 - **Denah**: gambar dinding, taruh AP dan penerima, peta sinyal, kuota, interferensi, saran posisi, ekspor PNG
-- **Kanal**: peta kanal 2.4, 5, dan 6 GHz
+- **Kanal**: peta kanal 2.4, 5, dan 6 GHz, plus saran kanal terbaik dari daftar Wi-Fi tetangga
 - **Keamanan**: jarak aman paparan RF dan acuan batas EIRP per wilayah
 - **Bandingkan**: membandingkan profil tersimpan
 - **Alat**: hitung terbalik, konverter, VSWR, noise dan SNR, estimasi kecepatan, panduan istilah
+
+## Laporan PDF
+
+Tombol **Laporan PDF** di kartu "Profil dan bagikan" membuka halaman `/laporan` yang berisi ringkasan perhitungan (dan denah bila ada AP). Pilih "Simpan sebagai PDF" di jendela cetak browser. Laporan dibangun dari parameter di URL, tanpa server.
+
+## Mode offline (PWA)
+
+`public/sw.js` menyimpan halaman dan aset statis setelah kunjungan pertama, jadi web tetap bisa dibuka tanpa sinyal. Service worker hanya aktif di build produksi. Untuk bisa dipasang sebagai aplikasi di semua browser, tambahkan ikon PNG 192 dan 512 px di `public/` dan daftarkan di `manifest.json`. Naikkan nama cache (`rf-analyzer-v1`) di `sw.js` bila ingin memaksa pembaruan.
 
 ## Struktur folder
 
@@ -95,6 +103,7 @@ Tes ada di folder `tests/` dan mencakup konversi satuan, EIRP, rugi lintasan, li
 - Profil: `localStorage` kunci `eirp-profiles`
 - Denah: `localStorage` kunci `eirp-floorplan`
 - Tema: `localStorage` kunci `theme`
+- Wi-Fi tetangga: `localStorage` kunci `eirp-neighbors`
 
 Tautan bagikan hanya berisi input kalkulator di parameter URL, tidak termasuk denah.
 
