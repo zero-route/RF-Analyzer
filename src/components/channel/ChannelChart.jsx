@@ -5,7 +5,7 @@ const TOP = 36;
 const BASE = 124;
 const HEIGHT = 168;
 
-export default function ChannelChart({ band, channels, freqMHz, onSelect }) {
+export default function ChannelChart({ band, channels, freqMHz, onSelect, neighbors = [] }) {
   const [lo, hi] = band.rangeMHz;
   const px = band.pxPerMHz;
   const width = (hi - lo) * px + PAD_X * 2;
@@ -81,6 +81,19 @@ export default function ChannelChart({ band, channels, freqMHz, onSelect }) {
           );
         })}
 
+        {neighbors.map((n) => {
+          const strength = Math.min(1, Math.max(0, (n.rssi + 90) / 60));
+          const y = BASE - 10 - strength * (BASE - TOP - 24);
+          return (
+            <g key={n.id} pointerEvents="none">
+              <line x1={x(n.chMHz)} y1={y} x2={x(n.chMHz)} y2={BASE} stroke="var(--muted)" strokeWidth="1.5" />
+              <circle cx={x(n.chMHz)} cy={y} r="4" fill="var(--ink)" />
+              <text x={x(n.chMHz)} y={y - 8} textAnchor="middle" fontSize="9" fill="var(--ink)" className="num">
+                {n.rssi}
+              </text>
+            </g>
+          );
+        })}
         <line x1={PAD_X} y1={BASE} x2={width - PAD_X} y2={BASE} stroke="var(--line)" strokeWidth="1" />
         {ticks.map((t) => (
           <g key={t}>
