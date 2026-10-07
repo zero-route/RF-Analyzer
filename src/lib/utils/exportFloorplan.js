@@ -9,7 +9,7 @@ const WALL_STYLE = {
   wallConcrete: { w: 8, dash: [] },
 };
 
-export function exportFloorplanPng({ widthM, heightM, walls, aps, clients, heat, results, legend, info, showInterference }) {
+export function drawFloorplanCanvas({ widthM, heightM, walls, aps, clients, heat, results, legend, info, showInterference }) {
   const css = getComputedStyle(document.documentElement);
   const read = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
   const bg = read("--surface", "#ffffff");
@@ -161,7 +161,15 @@ export function exportFloorplanPng({ widthM, heightM, walls, aps, clients, heat,
     );
   }
 
-  canvas.toBlob((blob) => {
+  return canvas;
+}
+
+export function floorplanDataUrl(args) {
+  return drawFloorplanCanvas(args).toDataURL("image/png");
+}
+
+export function exportFloorplanPng(args) {
+  drawFloorplanCanvas(args).toBlob((blob) => {
     if (!blob) return;
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
